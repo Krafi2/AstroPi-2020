@@ -31,7 +31,7 @@ def get_latlon(iss):
     return (iss.sublat / degree, iss.sublong / degree)
 
 def delta_t(t1, t2):
-    (t2 - t1).microseconds / 10**6
+    return (t2 - t1).microseconds / 10**6
 
 
 def main():
@@ -89,7 +89,7 @@ def main():
             sh.set_pixels(image)    
         
         # Take a measurment
-        if delta_t(prev_d, now_time) > 1 / m_freq:
+        if delta_t(prev_m, now_time) > 1 / m_freq:
             prev_m = now_time
 
             magnetometer = sh.get_compass()
