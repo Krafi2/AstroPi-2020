@@ -91,13 +91,15 @@ def main():
     
     while (now_time < start_time + timedelta(minutes=178)):
         # Update the display
-        if delta_t(prev_d, now_time) > 1 / d_freq:
+        if delta_t(prev_d, now_time) > (1 / d_freq):
+            print("AAAAAAA")
             prev_d = now_time
             image = [col * sin(time_k * now_time) for col in flag]
             sh.set_pixels(image)
         
         # Take a measurment
-        if delta_t(prev_m, now_time) > 1 / m_freq:
+        if delta_t(prev_m, now_time) > (1 / m_freq):
+            print('Jupiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
             prev_m = now_time
 
             magnetometer = sh.get_compass()
