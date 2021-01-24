@@ -31,7 +31,7 @@ def get_latlon(iss):
     return (iss.sublat / degree, iss.sublong / degree)
 
 def delta_t(t1, t2):
-    (t2 - t1).microseconds / 10^6
+    (t2 - t1).microseconds / 10**6
 
 
 def main():
