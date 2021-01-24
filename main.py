@@ -44,7 +44,7 @@ def main():
     dir_path = Path(__file__).parent.resolve()
 
     # Set a logfile name
-    logfile(dir_path / "kgang.log")
+    logfile((dir_path. / "kgang.log").resolve())
 
     data_file = dir_path / "data.csv"
 
