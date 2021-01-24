@@ -45,7 +45,7 @@ def main():
     # The cofficient applied to time when fading the image
     time_k = 1.
     # The low bound of the color multiplier
-    color_l_bound = 0.1
+    color_l_bound = 0.3
     # The acceleration in gs required to trigger the vibration warning
     vib_treshold = 1.1
     # Message to be displayed
