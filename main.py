@@ -38,9 +38,9 @@ def delta_t(t1, t2):
 
 def main():
     # This is the frequency at which we take measurments
-    m_freq = 1.
+    m_freq = 20.
     # The frequency at which we update the display
-    d_freq = 1.
+    d_freq = 20.
     # The cofficient applied to time when fading the image
     time_k = 1.
     # The acceleration in gs required to trigger the vibration warning
