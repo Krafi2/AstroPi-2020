@@ -97,7 +97,7 @@ def main():
         if delta_t(prev_d, now_time) > (1 / d_freq):
             print("AAAAAAA")
             prev_d = now_time
-            image = [[int(col / (1 + color_l_bound) * (color_l_bound + 0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6)))) for col in rgb] for rgb in flag]
+            image = [[int(col * (1 - color_l_bound) * (color_l_bound + 0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6)))) for col in rgb] for rgb in flag]
             sh.set_pixels(image)
         
         # Take a measurment
