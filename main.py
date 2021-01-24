@@ -46,6 +46,33 @@ def main():
     line1 = "1 25544U 98067A   21013.52860115  .00001434  00000-0  33837-4 0  9995"
     line2 = "2 25544  51.6460  27.6964 0000416 223.1682 273.8476 15.49286819264623"
     iss = readtle(name, line1, line2)
+    red = [200, 0, 0]
+    white = [200, 200, 200]
+    blue = [0, 0, 200]
+    black = [0, 0, 0]
+    yellow = [200, 200, 0]
+    flag = [
+    blue, white, white, white, white, white, white, white,
+    blue, blue, white, white, white, white, white, white,
+    blue, blue, blue, white, white, white, white, white,
+    blue, blue, blue, blue, white, white, white, white,
+    blue, blue, blue, blue, red, red, red, red,
+    blue, blue, blue, red, red, red, red, red,
+    blue, blue, red, red, red, red, red, red,
+    blue, red, red, red, red, red, red, red
+    ]
+    
+    smile = [
+    yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
+    yellow, yellow, black, yellow, yellow, black, yellow, yellow,
+    yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
+    yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
+    yellow, black, yellow, yellow, yellow, yellow, black, yellow,
+    yellow, yellow, black, yellow, yellow, black, yellow, yellow,
+    yellow, yellow, yellow, black, black, yellow, yellow, yellow,
+    yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
+    ]
+
 
     while (now_time < start_time + timedelta(minutes=178)):
         try:
@@ -53,9 +80,7 @@ def main():
             accelerometer = sh.get_accelerometer()
             gyroscope = sh.get_gyroscope()
     
-    
-            humidity = round(sh.humidity, 4)
-            temperature = round(sh.temperature, 4)
+  
             # get latitude and longitude
             latitude, longitude = get_latlon()
             # Save the data to the file
