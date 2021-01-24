@@ -42,7 +42,7 @@ def main():
     # The cofficient applied to time when fading the image
     time_k = 1.
     # The acceleration in gs required to trigger the vibration warning
-    vib_treshold = 0.1
+    vib_treshold = 1.1
     # Message to be displayed
     vib_message = "Please be careful. Thank you!"
 
