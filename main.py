@@ -80,8 +80,15 @@ def main():
         blue, red,   red,   red,   red,   red,   red,   red
     ]
 
-    angry = [
-
+     angry = [
+        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
+        yellow, yellow, black, yellow, yellow, black, yellow, yellow,
+        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
+        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
+        yellow, yellow, yellow, black, black, yellow, yellow, yellow,
+        yellow, yellow, black, yellow, yellow, black, yellow, yellow,
+        yellow, black, yellow, yellow, yellow, yellow, black, yellow,
+        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
     ]
     
     start_time = datetime.now()
