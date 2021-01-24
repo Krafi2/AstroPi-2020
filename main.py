@@ -7,7 +7,7 @@ import numpy
 import random
 from pathlib import Path
 import csv
-from math import sin
+from math import sin, sqrt
 
 
 def create_csv_file(data_file):
@@ -31,7 +31,7 @@ def get_latlon(iss):
     return (iss.sublat / degree, iss.sublong / degree)
 
 def delta_t(t1, t2):
-    return (t2 - t1).microseconds / 10**6
+    return abs((t2 - t1).microseconds / 10**6)
 
 
 def main():
@@ -42,7 +42,9 @@ def main():
     # The cofficient applied to time when fading the image
     time_k = 1.
     # The acceleration in gs required to trigger the vibration warning
-    vib_level = 0.1
+    vib_treshold = 0.1
+    # Message to be displayed
+    vib_message = "Please be careful. Thank you!"
 
     dir_path = Path(__file__).parent.resolve()
 
@@ -112,6 +114,9 @@ def main():
             add_csv_data(data_file, data)
         
         accel = sh.get_accelerometer_raw()
+        magnitude = sqrt(accel["x"]**2 + accel["y"]**2 + accel["z"]**2)
+        if magnitude > vib_treshold:
+            sh.show_message(vib_message)
 
         # Update the current time
         now_time = datetime.now()
