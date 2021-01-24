@@ -30,6 +30,9 @@ def get_latlon(iss):
     iss.compute()  # Get the lat/long values from ephem
     return (iss.sublat / degree, iss.sublong / degree)
 
+def delta_t(t1, t2):
+    (t2 - t1).microseconds / 10^6
+
 
 def main():
     # This is the frequency at which we take measurments
@@ -77,16 +80,16 @@ def main():
     prev_m = now_time
     # Time of previous display update
     prev_d = now_time
-
+    
     while (now_time < start_time + timedelta(minutes=178)):
         # Update the display
-        if now_time - prev_d > 1 / d_freq:
+        if delta_t(prev_d, now_time) > 1 / d_freq:
             prev_d = now_time
             image = [col * sin(time_k * now_time) for col in flag]
             sh.set_pixels(image)    
         
         # Take a measurment
-        if now_time - prev_m > 1 / m_freq:
+        if delta_t(prev_d, now_time) > 1 / m_freq:
             prev_m = now_time
 
             magnetometer = sh.get_compass()
