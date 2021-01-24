@@ -112,7 +112,6 @@ def main():
             add_csv_data(data_file, data)
         
         accel = sh.get_accelerometer_raw()
-        print(accel)
 
         # Update the current time
         now_time = datetime.now()
