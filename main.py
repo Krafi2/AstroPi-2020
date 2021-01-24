@@ -7,6 +7,7 @@ import numpy
 import random
 from pathlib import Path
 import csv
+from math import sin
 
 
 def create_csv_file(data_file):
@@ -24,14 +25,22 @@ def add_csv_data(data_file, data):
         writer.writerow(data)
 
 
-def get_latlon():
+def get_latlon(iss):
     """Return the current latitude and longitude, in degrees"""
     iss.compute()  # Get the lat/long values from ephem
     return (iss.sublat / degree, iss.sublong / degree)
 
 
 def main():
-    counter = 0
+    # This is the frequency at which we take measurments
+    m_freq = 1.
+    # The frequency at which we update the display
+    d_freq = 1.
+    # The cofficient applied to time when fading the image
+    time_k = 1.
+    # The acceleration in gs required to trigger the vibration warning
+    vib_level = 0.1
+
     dir_path = Path(__file__).parent.resolve()
 
     # Set a logfile name
@@ -41,8 +50,6 @@ def main():
 
     create_csv_file(data_file)
 
-    start_time = datetime.now()
-    now_time = datetime.now()
     sh = SenseHat()
     name = "ISS (ZARYA)"
     line1 = "1 25544U 98067A   21013.52860115  .00001434  00000-0  33837-4 0  9995"
@@ -52,61 +59,60 @@ def main():
     red = [200, 0, 0]
     white = [200, 200, 200]
     blue = [0, 0, 200]
-    black = [0, 0, 0]
-    yellow = [200, 200, 0]
-
+    
     flag = [
         blue, white, white, white, white, white, white, white,
-        blue, blue, white, white, white, white, white, white,
-        blue, blue, blue, white, white, white, white, white,
-        blue, blue, blue, blue, white, white, white, white,
-        blue, blue, blue, blue, red, red, red, red,
-        blue, blue, blue, red, red, red, red, red,
-        blue, blue, red, red, red, red, red, red,
-        blue, red, red, red, red, red, red, red
+        blue, blue,  white, white, white, white, white, white,
+        blue, blue,  blue,  white, white, white, white, white,
+        blue, blue,  blue,  blue,  white, white, white, white,
+        blue, blue,  blue,  blue,  red,   red,   red,   red,
+        blue, blue,  blue,  red,   red,   red,   red,   red,
+        blue, blue,  red,   red,   red,   red,   red,   red,
+        blue, red,   red,   red,   red,   red,   red,   red
     ]
 
-    smile = [
-        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-        yellow, yellow, black, yellow, yellow, black, yellow, yellow,
-        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-        yellow, black, yellow, yellow, yellow, yellow, black, yellow,
-        yellow, yellow, black, yellow, yellow, black, yellow, yellow,
-        yellow, yellow, yellow, black, black, yellow, yellow, yellow,
-        yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
-    ]
-    previous = smile
+    start_time = datetime.now()
+    now_time = datetime.now()
+    # Time of previous measurement
+    prev_m = now_time
+    # Time of previous display update
+    prev_d = now_time
 
     while (now_time < start_time + timedelta(minutes=178)):
-        if counter == 50:
-            counter += 1
-            if previous == smile:
-                sh.set_pixels(flag)
-                previous = flag
-            else:
-                sh.set_pixels(smile)
-                previous = flag
-        else:
-            counter += 1
         try:
-            magnetometer = sh.get_compass()
-            accelerometer = sh.get_accelerometer()
-            gyroscope = sh.get_gyroscope()
+            # Update the display
+            if now_time - prev_d > 1 / d_freq:
+                prev_d = now_time
+                image = [col * sin(time_k * now_time) for col in flag]
+                sh.set_pixels(image)    
+            
+            # Take a measurment
+            if now_time - prev_m > 1 / m_freq:
+                prev_m = now_time
 
-            # get latitude and longitude
-            latitude, longitude = get_latlon()
-            # Save the data to the file
-            data = (
-                datetime.now(),
-                magnetometer,
-                accelerometer,
-                gyroscope,
-                latitude,
-                longitude
-            )
-            add_csv_data(data_file, data)
-            # update the current time
+                magnetometer = sh.get_compass()
+                accelerometer = sh.get_accelerometer()
+                gyroscope = sh.get_gyroscope()
+
+                # get latitude and longitude
+                latitude, longitude = get_latlon(iss)
+
+                # Save the data to the file
+                data = (
+                    datetime.now(),
+                    magnetometer,
+                    accelerometer,
+                    gyroscope,
+                    latitude,
+                    longitude
+                )
+                print(data)
+                add_csv_data(data_file, data)
+            
+            accel = sh.get_accelerometer_raw
+            print(accel)
+
+            # Update the current time
             now_time = datetime.now()
         except Exception as e:
             logger.error('{}: {})'.format(e.__class__.__name__, e))
