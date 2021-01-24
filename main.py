@@ -31,7 +31,9 @@ def get_latlon(iss):
     return (iss.sublat / degree, iss.sublong / degree)
 
 def delta_t(t1, t2):
-    return abs((t2 - t1).microseconds / 10**6)
+    delta = abs((t2 - t1).microseconds / 10**6)
+    print("delta", delta)
+    return delta
 
 
 def main():
@@ -76,6 +78,10 @@ def main():
         blue, red,   red,   red,   red,   red,   red,   red
     ]
 
+    angry = [
+
+    ]
+    
     start_time = datetime.now()
     now_time = datetime.now()
     # Time of previous measurement
