@@ -51,7 +51,7 @@ def main():
     dir_path = Path(__file__).parent.resolve()
 
     # Set a logfile name
-    logfile((dir_path / "kgang.log").resolve())
+    logfile(dir_path / "kgang.log")
 
     data_file = dir_path / "data.csv"
 
@@ -83,7 +83,7 @@ def main():
     ]
     
     start_time = datetime.now()
-    now_time = datetime.now()
+    now_time = start_time
     # Time of previous measurement
     prev_m = now_time
     # Time of previous display update
@@ -94,7 +94,7 @@ def main():
         if delta_t(prev_d, now_time) > 1 / d_freq:
             prev_d = now_time
             image = [col * sin(time_k * now_time) for col in flag]
-            sh.set_pixels(image)    
+            sh.set_pixels(image)
         
         # Take a measurment
         if delta_t(prev_m, now_time) > 1 / m_freq:
@@ -116,7 +116,7 @@ def main():
                 latitude,
                 longitude
             )
-            print(data)
+            print("Yeet", data)
             add_csv_data(data_file, data)
         
         accel = sh.get_accelerometer_raw()
