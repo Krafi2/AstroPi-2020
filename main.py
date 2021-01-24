@@ -123,6 +123,7 @@ def main():
         accel = sh.get_accelerometer_raw()
         magnitude = sqrt(accel["x"]**2 + accel["y"]**2 + accel["z"]**2)
         if magnitude > vib_treshold:
+            pass
             # sh.show_message(vib_message)
 
         # Update the current time
