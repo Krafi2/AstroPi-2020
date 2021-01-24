@@ -114,7 +114,7 @@ def main():
         # Update the current time
         now_time = datetime.now()
         try:
-            
+            pass
         except Exception as e:
             logger.error('{}: {})'.format(e.__class__.__name__, e))
 
