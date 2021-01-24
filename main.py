@@ -79,41 +79,42 @@ def main():
     prev_d = now_time
 
     while (now_time < start_time + timedelta(minutes=178)):
+        # Update the display
+        if now_time - prev_d > 1 / d_freq:
+            prev_d = now_time
+            image = [col * sin(time_k * now_time) for col in flag]
+            sh.set_pixels(image)    
+        
+        # Take a measurment
+        if now_time - prev_m > 1 / m_freq:
+            prev_m = now_time
+
+            magnetometer = sh.get_compass()
+            accelerometer = sh.get_accelerometer()
+            gyroscope = sh.get_gyroscope()
+
+            # get latitude and longitude
+            latitude, longitude = get_latlon(iss)
+
+            # Save the data to the file
+            data = (
+                datetime.now(),
+                magnetometer,
+                accelerometer,
+                gyroscope,
+                latitude,
+                longitude
+            )
+            print(data)
+            add_csv_data(data_file, data)
+        
+        accel = sh.get_accelerometer_raw
+        print(accel)
+
+        # Update the current time
+        now_time = datetime.now()
         try:
-            # Update the display
-            if now_time - prev_d > 1 / d_freq:
-                prev_d = now_time
-                image = [col * sin(time_k * now_time) for col in flag]
-                sh.set_pixels(image)    
             
-            # Take a measurment
-            if now_time - prev_m > 1 / m_freq:
-                prev_m = now_time
-
-                magnetometer = sh.get_compass()
-                accelerometer = sh.get_accelerometer()
-                gyroscope = sh.get_gyroscope()
-
-                # get latitude and longitude
-                latitude, longitude = get_latlon(iss)
-
-                # Save the data to the file
-                data = (
-                    datetime.now(),
-                    magnetometer,
-                    accelerometer,
-                    gyroscope,
-                    latitude,
-                    longitude
-                )
-                print(data)
-                add_csv_data(data_file, data)
-            
-            accel = sh.get_accelerometer_raw
-            print(accel)
-
-            # Update the current time
-            now_time = datetime.now()
         except Exception as e:
             logger.error('{}: {})'.format(e.__class__.__name__, e))
 
