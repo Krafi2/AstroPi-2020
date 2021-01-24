@@ -31,7 +31,8 @@ def get_latlon(iss):
     return (iss.sublat / degree, iss.sublong / degree)
 
 def delta_t(t1, t2):
-    delta = abs((t2 - t1).microseconds / 10**6)
+    let delta = abs(t2 - t1)
+    delta = delta.seconds + delta.microseconds / 10**6
     print("delta", delta)
     return delta
 
@@ -94,7 +95,7 @@ def main():
         if delta_t(prev_d, now_time) > (1 / d_freq):
             print("AAAAAAA")
             prev_d = now_time
-            image = [[int(col * sin(time_k * (now_time.microsecond / 10**6))) for col in rgb] for rgb in flag]
+            image = [[int(col * sin(time_k * (now_time.second + now_time.microsecond / 10**6))) for col in rgb] for rgb in flag]
             sh.set_pixels(image)
         
         # Take a measurment
