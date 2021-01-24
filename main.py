@@ -14,7 +14,7 @@ def create_csv_file(data_file):
     """Create a new CSV file and add the header row"""
     with open(data_file, 'w') as f:
         writer = csv.writer(f)
-        header = ("Date/time", "Magnetometer ", "Gyroscope", "Accelerometer")
+        header = ("Date/time", "Magnetometer", "Gyroscope", "Accelerometer")
         writer.writerow(header)
 
 def add_csv_data(data_file, data):
@@ -32,7 +32,7 @@ def get_latlon():
 dir_path = Path(__file__).parent.resolve()
 
 # Set a logfile name
-logfile(dir_path/"K-Gang.log")
+logfile(dir_path/"kgang.log")
 
 data_file = dir_path/"data.csv"
 
@@ -60,9 +60,9 @@ while (now_time < start_time + timedelta(minutes=178)):
         # Save the data to the file
         data = (
             datetime.now(),
-            humidity,
-            temperature,
-            df,
+            magnetometer,
+            accelerometer,
+            gyroscope,
             latitude,
             longitude
         )
