@@ -1,0 +1,73 @@
+from logzero import logger, logfile
+from sense_hat import SenseHat
+from ephem import readtle, degree
+from datetime import datetime, timedelta
+from time import sleep
+import numpy
+import random
+from pathlib import Path
+import csv
+
+
+
+def create_csv_file(data_file):
+    """Create a new CSV file and add the header row"""
+    with open(data_file, 'w') as f:
+        writer = csv.writer(f)
+        header = ("Date/time", "Magnetometer ", "Gyroscope", "Accelerometer")
+        writer.writerow(header)
+
+def add_csv_data(data_file, data):
+    """Add a row of data to the data_file CSV"""
+    with open(data_file, 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(data)
+
+def get_latlon():
+    """Return the current latitude and longitude, in degrees"""
+    iss.compute() # Get the lat/long values from ephem
+    return (iss.sublat / degree, iss.sublong / degree)
+
+
+dir_path = Path(__file__).parent.resolve()
+
+# Set a logfile name
+logfile(dir_path/"K-Gang.log")
+
+data_file = dir_path/"data.csv"
+
+create_csv_file(data_file)
+
+start_time = datetime.now()
+now_time = datetime.now()
+sh = SenseHat()
+name = "ISS (ZARYA)"
+line1 = "1 25544U 98067A   21013.52860115  .00001434  00000-0  33837-4 0  9995"
+line2 = "2 25544  51.6460  27.6964 0000416 223.1682 273.8476 15.49286819264623"
+iss = readtle(name, line1, line2)
+
+while (now_time < start_time + timedelta(minutes=178)):
+    try:
+        magnetometer = sh.get_compass()
+        accelerometer = sh.get_accelerometer()
+        gyroscope = sh.get_gyroscope()
+
+
+        humidity = round(sh.humidity, 4)
+        temperature = round(sh.temperature, 4)
+        # get latitude and longitude
+        latitude, longitude = get_latlon()
+        # Save the data to the file
+        data = (
+            datetime.now(),
+            humidity,
+            temperature,
+            df,
+            latitude,
+            longitude
+        )
+        add_csv_data(data_file, data)
+        # update the current time
+        now_time = datetime.now()
+    except Exception as e:
+        logger.error('{}: {})'.format(e.__class__.__name__, e))
