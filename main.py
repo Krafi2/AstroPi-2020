@@ -44,6 +44,8 @@ def main():
     d_freq = 20.
     # The cofficient applied to time when fading the image
     time_k = 1.
+    # The low bound of the color multiplier
+    color_l_bound = 0.1
     # The acceleration in gs required to trigger the vibration warning
     vib_treshold = 1.1
     # Message to be displayed
@@ -64,9 +66,9 @@ def main():
     line2 = "2 25544  51.6460  27.6964 0000416 223.1682 273.8476 15.49286819264623"
     iss = readtle(name, line1, line2)
 
-    red = [200, 0, 0]
-    white = [200, 200, 200]
-    blue = [0, 0, 200]
+    red = [100, 0, 0]
+    white = [100, 100, 100]
+    blue = [0, 0, 100]
     
     flag = [
         blue, white, white, white, white, white, white, white,
@@ -95,7 +97,7 @@ def main():
         if delta_t(prev_d, now_time) > (1 / d_freq):
             print("AAAAAAA")
             prev_d = now_time
-            image = [[int(col * (0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6)))) for col in rgb] for rgb in flag]
+            image = [[int(col / (1 + color_l_bound) * (color_l_bound + 0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6)))) for col in rgb] for rgb in flag]
             sh.set_pixels(image)
         
         # Take a measurment
