@@ -29,45 +29,49 @@ def get_latlon():
     return (iss.sublat / degree, iss.sublong / degree)
 
 
-dir_path = Path(__file__).parent.resolve()
+def main():
+    dir_path = Path(__file__).parent.resolve()
 
-# Set a logfile name
-logfile(dir_path/"kgang.log")
+    # Set a logfile name
+    logfile(dir_path/"kgang.log")
 
-data_file = dir_path/"data.csv"
+    data_file = dir_path/"data.csv"
 
-create_csv_file(data_file)
+    create_csv_file(data_file)
 
-start_time = datetime.now()
-now_time = datetime.now()
-sh = SenseHat()
-name = "ISS (ZARYA)"
-line1 = "1 25544U 98067A   21013.52860115  .00001434  00000-0  33837-4 0  9995"
-line2 = "2 25544  51.6460  27.6964 0000416 223.1682 273.8476 15.49286819264623"
-iss = readtle(name, line1, line2)
+    start_time = datetime.now()
+    now_time = datetime.now()
+    sh = SenseHat()
+    name = "ISS (ZARYA)"
+    line1 = "1 25544U 98067A   21013.52860115  .00001434  00000-0  33837-4 0  9995"
+    line2 = "2 25544  51.6460  27.6964 0000416 223.1682 273.8476 15.49286819264623"
+    iss = readtle(name, line1, line2)
 
-while (now_time < start_time + timedelta(minutes=178)):
-    try:
-        magnetometer = sh.get_compass()
-        accelerometer = sh.get_accelerometer()
-        gyroscope = sh.get_gyroscope()
+    while (now_time < start_time + timedelta(minutes=178)):
+        try:
+            magnetometer = sh.get_compass()
+            accelerometer = sh.get_accelerometer()
+            gyroscope = sh.get_gyroscope()
+    
+    
+            humidity = round(sh.humidity, 4)
+            temperature = round(sh.temperature, 4)
+            # get latitude and longitude
+            latitude, longitude = get_latlon()
+            # Save the data to the file
+            data = (
+                datetime.now(),
+                magnetometer,
+                accelerometer,
+                gyroscope,
+                latitude,
+                longitude
+            )
+            add_csv_data(data_file, data)
+            # update the current time
+            now_time = datetime.now()
+        except Exception as e:
+            logger.error('{}: {})'.format(e.__class__.__name__, e))
 
-
-        humidity = round(sh.humidity, 4)
-        temperature = round(sh.temperature, 4)
-        # get latitude and longitude
-        latitude, longitude = get_latlon()
-        # Save the data to the file
-        data = (
-            datetime.now(),
-            magnetometer,
-            accelerometer,
-            gyroscope,
-            latitude,
-            longitude
-        )
-        add_csv_data(data_file, data)
-        # update the current time
-        now_time = datetime.now()
-    except Exception as e:
-        logger.error('{}: {})'.format(e.__class__.__name__, e))
+if __name__ == "__main__":
+    main()
