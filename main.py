@@ -33,7 +33,6 @@ def get_latlon(iss):
 def delta_t(t1, t2):
     delta = abs(t2 - t1)
     delta = delta.seconds + delta.microseconds / 10**6
-    print("delta", delta)
     return delta
 
 
@@ -119,7 +118,6 @@ def main():
                 latitude,
                 longitude
             )
-            print("Yeet", data)
             add_csv_data(data_file, data)
         
         accel = sh.get_accelerometer_raw()
