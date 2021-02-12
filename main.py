@@ -105,9 +105,9 @@ def main():
     prev_m = now_time
     # Time of previous display update
     prev_d = now_time
-    
+    # The program will run for 178 minutes
     while (now_time < start_time + timedelta(minutes=178)):
-        # Update the display
+        # We're using this function to make screen brighter and darker over time, at some point the disply will turn off and after a few seconds it'll turn on again
         if delta_t(prev_d, now_time) > (1 / d_freq):
             prev_d = now_time
             image = [[int(col * (color_l_bound + (1 - color_l_bound) * (0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6))))) for col in rgb] for rgb in flag]
@@ -116,7 +116,7 @@ def main():
         # Take a measurment
         if delta_t(prev_m, now_time) > (1 / m_freq):
             prev_m = now_time
-            # define data
+            # define data, we need raw compass and accelerometer
             magnetometer = sh.get_compass_raw()
             accelerometer = sh.get_accelerometer_raw()
             gyroscope = sh.get_gyroscope()
