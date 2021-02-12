@@ -79,6 +79,7 @@ def main():
         blue, blue,  red,   red,   red,   red,   red,   red,
         blue, red,   red,   red,   red,   red,   red,   red
     ]
+    """This is a flag of the Czech Republic."""
 
      angry = [
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
@@ -90,7 +91,8 @@ def main():
         yellow, black, yellow, yellow, yellow, yellow, black, yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
     ]
-    
+    """This is an angry smiley that points out tremours."""
+
     start_time = datetime.now()
     now_time = start_time
     # Time of previous measurement
