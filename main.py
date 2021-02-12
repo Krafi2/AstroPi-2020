@@ -91,7 +91,7 @@ def main():
         yellow, black, yellow, yellow, yellow, yellow, black, yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
     ]
-    """This is an angry smiley that points out tremours."""
+    """This is an angry smiley that points out tremors."""
 
     start_time = datetime.now()
     now_time = start_time
