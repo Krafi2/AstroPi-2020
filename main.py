@@ -85,7 +85,8 @@ def main():
     ]
     
 
-    """This is an image of an angry emoji, which will be displayed when the accelerometr detects acceleration above vib_treshold. We used an emoji instead of text, because the execution stalled while displaying text, which interrupted our measurements."""
+    """This is an image of an angry emoji, which will be displayed when the accelerometr detects acceleration above vib_treshold.
+     We used an emoji instead of text, because the execution stalled while displaying text, which interrupted our measurements."""
     angry = [
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
         yellow, yellow, black,  yellow, yellow, black,  yellow, yellow,
