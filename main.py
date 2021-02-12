@@ -71,7 +71,10 @@ def main():
     yellow = []
     black = []
     
-    """This is a flag of the Czech Republic."""
+    """This is a flag of the Czech Republic.aaaaaaaaaaaa
+    aaaaaaaaaaaaaaaaaa
+    aaaaaaaaaaaaaaaaaaa
+    """
     flag = [
         blue, white, white, white, white, white, white, white,
         blue, blue,  white, white, white, white, white, white,
@@ -97,7 +100,7 @@ def main():
     ]
     
 
-    start_time = datetime.now()
+    start_time = datetime.now() 
     now_time = start_time
     # Time of previous measurement
     prev_m = now_time
