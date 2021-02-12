@@ -68,12 +68,11 @@ def main():
     red = [100, 0, 0]
     white = [100, 100, 100]
     blue = [0, 0, 100]
-    yellow = []
-    black = []
+    yellow = [100, 100, 0]
+    black = [0, 0, 0]
     
-    """This is a flag of the Czech Republic.aaaaaaaaaaaa
-    aaaaaaaaaaaaaaaaaa
-    aaaaaaaaaaaaaaaaaaa
+    """
+    This is a flag of the Czech Republic.
     """
     flag = [
         blue, white, white, white, white, white, white, white,
@@ -100,7 +99,7 @@ def main():
     ]
     
 
-    start_time = datetime.now() 
+    start_time = datetime.now()
     now_time = start_time
     # Time of previous measurement
     prev_m = now_time
@@ -117,9 +116,9 @@ def main():
         # Take a measurment
         if delta_t(prev_m, now_time) > (1 / m_freq):
             prev_m = now_time
-
-            magnetometer = sh.get_compass()
-            accelerometer = sh.get_accelerometer()
+            # define data
+            magnetometer = sh.get_compass_raw()
+            accelerometer = sh.get_accelerometer_raw()
             gyroscope = sh.get_gyroscope()
 
             # get latitude and longitude
@@ -136,10 +135,10 @@ def main():
             )
             add_csv_data(data_file, data)
         
-        accel = sh.get_accelerometer_raw()
-        magnitude = sqrt(accel["x"]**2 + accel["y"]**2 + accel["z"]**2)
+        # if magnitude is over some level, the display will show angry face
+        magnitude = sqrt(accelerometer["x"]**2 + accelerometer["y"]**2 + accelerometer["z"]**2)
         if magnitude > vib_treshold:
-            pass
+            sh.set_pixels(angry)
             # sh.show_message(vib_message)
 
         # Update the current time
