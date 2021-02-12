@@ -68,7 +68,10 @@ def main():
     red = [100, 0, 0]
     white = [100, 100, 100]
     blue = [0, 0, 100]
+    yellow = []
+    black = []
     
+    """This is a flag of the Czech Republic."""
     flag = [
         blue, white, white, white, white, white, white, white,
         blue, blue,  white, white, white, white, white, white,
@@ -79,9 +82,10 @@ def main():
         blue, blue,  red,   red,   red,   red,   red,   red,
         blue, red,   red,   red,   red,   red,   red,   red
     ]
-    """This is a flag of the Czech Republic."""
+    
 
-     angry = [
+    """This is an angry smiley that points out tremors."""
+    angry = [
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
         yellow, yellow, black, yellow, yellow, black, yellow, yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
@@ -91,7 +95,7 @@ def main():
         yellow, black, yellow, yellow, yellow, yellow, black, yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
     ]
-    """This is an angry smiley that points out tremors."""
+    
 
     start_time = datetime.now()
     now_time = start_time
