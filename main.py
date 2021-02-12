@@ -71,9 +71,8 @@ def main():
     yellow = [100, 100, 0]
     black = [0, 0, 0]
     
-    """
-    This is a flag of the Czech Republic.
-    """
+    """This is a flag of the Czech Republic, which will be displayed by the computer when everything is running correctly.
+    In order to communicate that the program isn't stalling, the picture will fade using a sin function."""
     flag = [
         blue, white, white, white, white, white, white, white,
         blue, blue,  white, white, white, white, white, white,
@@ -86,15 +85,15 @@ def main():
     ]
     
 
-    """This is an angry smiley that points out tremors."""
+    """This is an image of an angry emoji, which will be displayed when the accelerometr detects acceleration above vib_treshold"""
     angry = [
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-        yellow, yellow, black, yellow, yellow, black, yellow, yellow,
+        yellow, yellow, black,  yellow, yellow, black,  yellow, yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-        yellow, yellow, yellow, black, black, yellow, yellow, yellow,
-        yellow, yellow, black, yellow, yellow, black, yellow, yellow,
-        yellow, black, yellow, yellow, yellow, yellow, black, yellow,
+        yellow, yellow, yellow, black,  black,  yellow, yellow, yellow,
+        yellow, yellow, black,  yellow, yellow, black,  yellow, yellow,
+        yellow, black,  yellow, yellow, yellow, yellow, black,  yellow,
         yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
     ]
     
@@ -107,44 +106,43 @@ def main():
     prev_d = now_time
     # The program will run for 178 minutes
     while (now_time < start_time + timedelta(minutes=178)):
-        # We're using this function to make screen brighter and darker over time, at some point the disply will turn off and after a few seconds it'll turn on again
-        if delta_t(prev_d, now_time) > (1 / d_freq):
-            prev_d = now_time
-            image = [[int(col * (color_l_bound + (1 - color_l_bound) * (0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6))))) for col in rgb] for rgb in flag]
-            sh.set_pixels(image)
-        
-        # Take a measurment
-        if delta_t(prev_m, now_time) > (1 / m_freq):
-            prev_m = now_time
-            # define data, we need raw compass and accelerometer
-            magnetometer = sh.get_compass_raw()
-            accelerometer = sh.get_accelerometer_raw()
-            gyroscope = sh.get_gyroscope()
-
-            # get latitude and longitude
-            latitude, longitude = get_latlon(iss)
-
-            # Save the data to the file
-            data = (
-                datetime.now(),
-                magnetometer,
-                accelerometer,
-                gyroscope,
-                latitude,
-                longitude
-            )
-            add_csv_data(data_file, data)
-        
-        # if magnitude is over some level, the display will show angry face
-        magnitude = sqrt(accelerometer["x"]**2 + accelerometer["y"]**2 + accelerometer["z"]**2)
-        if magnitude > vib_treshold:
-            sh.set_pixels(angry)
-            # sh.show_message(vib_message)
-
-        # Update the current time
-        now_time = datetime.now()
         try:
-            pass
+            # We're using this function to make screen brighter and darker over time, at some point the disply will turn off and after a few seconds it'll turn on again
+            if delta_t(prev_d, now_time) > (1 / d_freq):
+                prev_d = now_time
+                image = [[int(col * (color_l_bound + (1 - color_l_bound) * (0.5 + 0.5 * sin(time_k * (now_time.second + now_time.microsecond / 10**6))))) for col in rgb] for rgb in flag]
+                sh.set_pixels(image)
+            
+            # Take a measurment
+            if delta_t(prev_m, now_time) > (1 / m_freq):
+                prev_m = now_time
+                # define data, we need raw compass and accelerometer
+                magnetometer = sh.get_compass_raw()
+                accelerometer = sh.get_accelerometer_raw()
+                gyroscope = sh.get_gyroscope()
+
+                # get latitude and longitude
+                latitude, longitude = get_latlon(iss)
+
+                # Save the data to the file
+                data = (
+                    datetime.now(),
+                    magnetometer,
+                    accelerometer,
+                    gyroscope,
+                    latitude,
+                    longitude
+                )
+                add_csv_data(data_file, data)
+            
+            # if magnitude is over some level, the display will show angry face
+            magnitude = sqrt(accelerometer["x"]**2 + accelerometer["y"]**2 + accelerometer["z"]**2)
+            if magnitude > vib_treshold:
+                sh.set_pixels(angry)
+                # sh.show_message(vib_message)
+
+            # Update the current time
+            now_time = datetime.now()
         except Exception as e:
             logger.error('{}: {})'.format(e.__class__.__name__, e))
 
