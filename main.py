@@ -31,6 +31,7 @@ def get_latlon(iss):
     return (iss.sublat / degree, iss.sublong / degree)
 
 def delta_t(t1, t2):
+    """This function returns the time delta in between two datetimes seconds as a float"""
     delta = abs(t2 - t1)
     delta = delta.seconds + delta.microseconds / 10**6
     return delta
