@@ -1,5 +1,5 @@
 from logzero import logger, logfile
-from sense_emu import SenseHat
+from sense_hat import SenseHat
 from ephem import readtle, degree
 from datetime import datetime, timedelta
 from time import sleep
