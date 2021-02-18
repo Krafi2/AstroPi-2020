@@ -8,10 +8,12 @@ from math import sin, sqrt
 
 
 def create_csv_file(data_file):
-    """Create a new CSV file and add the header row"""
+    """Create a new CSV file and add the header row.
+    date/time, mag_x, mag_y, mag_z, acc_x, acc_y, acc_z, pitch, roll, yaw, latitude, longitude
+    """
     with open(data_file, 'w') as f:
         writer = csv.writer(f)
-        header = ("Date/time", "Magnetometer", "Accelerometer", "Gyroscope", "Latitide", "Longitude")
+        header = ("date/time", "mag_x", "mag_y", "mag_z", "acc_x", "acc_y", "acc_z", "pitch", "roll", "yaw", "latitude", "longitude")
         writer.writerow(header)
 
 
@@ -49,7 +51,7 @@ def main():
     # The low bound of the color multiplier
     color_l_bound = 0.4
     # The acceleration in gs required to trigger the vibration warning
-    # TODO change this to space a compatible value before sending off the program
+    # TODO change this to a space compatible value before sending off the program
     vib_treshold = 1.1
     # This message is displayed when acceleration exceeds vib_treshold
     vib_message = "Please be careful. Thank you!"
@@ -172,16 +174,23 @@ def main():
                 magnetometer = sh.get_compass_raw()
                 accelerometer = sh.get_accelerometer_raw()
                 gyroscope = sh.get_gyroscope()
-
                 # Get latitude and longitude just in case we need it
                 latitude, longitude = get_latlon(iss)
 
+
                 # Save the data to the file
+                # date/time, mag_x, mag_y, mag_z, acc_x, acc_y, acc_z, pitch, roll, yaw, latitude, longitude
                 data = (
-                    datetime.now(),
-                    magnetometer,
-                    accelerometer,
-                    gyroscope,
+                    now_time,
+                    magnetometer["x"],
+                    magnetometer["y"],
+                    magnetometer["z"],
+                    accelerometer["x"],
+                    accelerometer["y"],
+                    accelerometer["z"],
+                    gyroscope["pitch"],
+                    gyroscope["roll"],
+                    gyroscope["yaw"],
                     latitude,
                     longitude
                 )
