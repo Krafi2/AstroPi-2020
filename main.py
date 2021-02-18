@@ -65,7 +65,7 @@ def main():
     # Setup the logfile
     logfile(dir_path / "kgang.log")
     # File for data collection
-    data_file = dir_path / "data.csv"
+    data_file = dir_path / "data01.csv"
 
     create_csv_file(data_file)
 
@@ -141,7 +141,7 @@ def main():
             # Compute the acceleration. If the measured acceleration is larger than vib_treshold, we display a warning message.
             accelerometer = sh.get_accelerometer_raw()
             accel = sqrt(accelerometer["x"]**2 + accelerometer["y"]**2 + accelerometer["z"]**2)
-            if accel > vib_treshold:
+            if accel > vib_treshold and m_start is None:
                 m_start = now_time
                 logger.warning("Detected acceleration above treshold.")
 
