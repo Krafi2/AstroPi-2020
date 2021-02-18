@@ -51,8 +51,7 @@ def main():
     # The low bound of the color multiplier
     color_l_bound = 0.4
     # The acceleration in gs required to trigger the vibration warning
-    # TODO change this to a space compatible value before sending off the program
-    vib_treshold = 1.1
+    vib_treshold = 0.1
     # This message is displayed when acceleration exceeds vib_treshold
     vib_message = "Please be careful. Thank you!"
     # Message duration in seconds
@@ -80,10 +79,6 @@ def main():
     red = [100, 0, 0]
     white = [100, 100, 100]
     blue = [0, 0, 100]
-
-    # TODO remove this as this has become irrelevant
-    # yellow = [100, 100, 0]
-    # black = [0, 0, 0]
     
     """This is a flag of the Czech Republic, which will be displayed by the computer when everything is running correctly.
     In order to communicate that the program isn't stalling, the picture will fade using the sin function."""
@@ -98,22 +93,6 @@ def main():
         blue, red,   red,   red,   red,   red,   red,   red
     ]
     
-    # TODO remove this as this has become irrelevant
-    # """This is an image of an angry emoji, which will be displayed when the accelerometr detects acceleration above vib_treshold.
-    # In the project proposal we said that we would display a text message, however we have found that program execution stalls while
-    # displaying text, which interrupts our measurments."""
-    # angry = [
-    #     yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-    #     yellow, yellow, black,  yellow, yellow, black,  yellow, yellow,
-    #     yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-    #     yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow,
-    #     yellow, yellow, yellow, black,  black,  yellow, yellow, yellow,
-    #     yellow, yellow, black,  yellow, yellow, black,  yellow, yellow,
-    #     yellow, black,  yellow, yellow, yellow, yellow, black,  yellow,
-    #     yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow
-    # ]
-    
-
     start_time = datetime.now()
     now_time = start_time
     # Time of previous measurement
