@@ -2,14 +2,10 @@ from logzero import logger, logfile
 from sense_hat import SenseHat
 from ephem import readtle, degree
 from datetime import datetime, timedelta
-from time import sleep
-import numpy
-import random
 from pathlib import Path
 import csv
 from math import sin, sqrt
 
-SenseHat.set_pixels
 
 def create_csv_file(data_file):
     """Create a new CSV file and add the header row"""
@@ -47,18 +43,18 @@ def main():
     # This is the frequency at which we take measurments
     m_freq = 20.
     # The frequency at which we update the display
-    d_freq = 20.
+    d_freq = 10.
     # The cofficient applied to time when fading the image
     time_k = 1.
     # The low bound of the color multiplier
-    color_l_bound = 0.5
+    color_l_bound = 0.4
     # The acceleration in gs required to trigger the vibration warning
     # TODO change this to space a compatible value before sending off the program
     vib_treshold = 1.1
     # This message is displayed when acceleration exceeds vib_treshold
     vib_message = "Please be careful. Thank you!"
     # Message duration in seconds
-    m_duration = 5.
+    m_duration = 10.
     # Colour of the message text
     m_colour = [100, 100, 100]
     # Path to program root
@@ -122,10 +118,8 @@ def main():
     prev_m = now_time
     # Time of previous display update
     prev_d = now_time
-    # Boolean value describing whether a message is currently playing
-    m_playing = False
-    # The time at which we've started playing the message
-    m_start = start_time
+    # The time at which we've started playing the message or None if no message is playing
+    m_start = None
 
     # The program will run for 178 minutes
     # The loop does things in this order:
@@ -138,66 +132,60 @@ def main():
     #       - If no message is currently playing, we fade the flag image to communicate that the program hasn't crashed.
     #   - Lastly, we check whether we should take a measurment, and if the time is right, we do just that.
     while (now_time < start_time + timedelta(minutes=178)):
-        # Update the current time
-        now_time = datetime.now()
-        
-        # Compute the acceleration. If the measured acceleration is larger than vib_treshold, we display a warning message.
-        accelerometer = sh.get_accelerometer_raw()
-        accel = sqrt(accelerometer["x"]**2 + accelerometer["y"]**2 + accelerometer["z"]**2)
-        if accel > vib_treshold:
-            m_playing = True
-            m_start = now_time
-            logger.warning("Detected vibrations above treshold")
-
-        # This condition checks whether it's time to update the display.
-        if delta_t(prev_d, now_time) > (1 / d_freq):
-            prev_d = now_time
-            # If this variable is set in the first condition, we immediately update the screen
-            display_img = False
-            # No point in checking the delta time if we aren't even playing a message
-            if m_playing:
-                message_t = delta_t(now_time, m_start)
-                # Check if we've overshot already
-                if message_t >= m_duration:
-                    # Stop playing the message
-                    m_playing = False
-                    # Update display
-                    display_img = True
-                else:
-                    # Compute what letter we should be displaying
-                    idx = int(message_t / m_duration * len(vib_message))
-                    letter = vib_message[idx]
-                    sh.show_letter(letter, text_colour = m_colour)
-
-            # Display the 'all ok' image
-            if not m_playing or display_img:
-                image = apply_fade(flag, now_time, time_k, color_l_bound)
-                sh.set_pixels(image)
-        
-        # This condition checks whether it's time to take a measurment.
-        if delta_t(prev_m, now_time) > (1 / m_freq):
-            prev_m = now_time
-            # Here we collect sensor data. It seems that the non raw variants of the sensor
-            # functions all return orientation of the computer, so we use the raw variants
-            magnetometer = sh.get_compass_raw()
-            accelerometer = sh.get_accelerometer_raw()
-            gyroscope = sh.get_gyroscope()
-
-            # Get latitude and longitude just in case we need it
-            latitude, longitude = get_latlon(iss)
-
-            # Save the data to the file
-            data = (
-                datetime.now(),
-                magnetometer,
-                accelerometer,
-                gyroscope,
-                latitude,
-                longitude
-            )
-            add_csv_data(data_file, data)
         try:
-           pass
+            # Update the current time
+            now_time = datetime.now()
+            
+            # Compute the acceleration. If the measured acceleration is larger than vib_treshold, we display a warning message.
+            accelerometer = sh.get_accelerometer_raw()
+            accel = sqrt(accelerometer["x"]**2 + accelerometer["y"]**2 + accelerometer["z"]**2)
+            if accel > vib_treshold:
+                m_start = now_time
+                logger.warning("Detected acceleration above treshold.")
+
+            # This condition checks whether it's time to update the display.
+            if delta_t(prev_d, now_time) > (1 / d_freq):
+                prev_d = now_time
+                # No point in checking the delta time if we aren't even playing a message
+                if m_start is not None:
+                    message_t = delta_t(now_time, m_start)
+                    # Check if we've overshot already
+                    if message_t >= m_duration:
+                        # Stop playing the message. The display will be updated to display the image.
+                        m_start = None
+                    else:
+                        # Compute what letter we should be displaying
+                        idx = int(message_t / m_duration * len(vib_message))
+                        letter = vib_message[idx]
+                        sh.show_letter(letter, text_colour = m_colour)
+
+                # Display the 'all ok' image
+                if m_start is None:
+                    image = apply_fade(flag, now_time, time_k, color_l_bound)
+                    sh.set_pixels(image)
+            
+            # This condition checks whether it's time to take a measurment.
+            if delta_t(prev_m, now_time) > (1 / m_freq):
+                prev_m = now_time
+                # Here we collect sensor data. It seems that the non raw variants of the sensor
+                # functions all return orientation of the computer, so we use the raw variants
+                magnetometer = sh.get_compass_raw()
+                accelerometer = sh.get_accelerometer_raw()
+                gyroscope = sh.get_gyroscope()
+
+                # Get latitude and longitude just in case we need it
+                latitude, longitude = get_latlon(iss)
+
+                # Save the data to the file
+                data = (
+                    datetime.now(),
+                    magnetometer,
+                    accelerometer,
+                    gyroscope,
+                    latitude,
+                    longitude
+                )
+                add_csv_data(data_file, data)
 
         except Exception as e:
             logger.error('{}: {})'.format(e.__class__.__name__, e))
