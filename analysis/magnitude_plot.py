@@ -8,8 +8,8 @@ def magnitudes(file: str) -> [float]:
     mag = [np.linalg.norm(i) for i in data.mag]
     return mag
 
-# Takes the path of the data path as a command line argument and
-# saves the magnitude plot of the measured strength of the magnetometr
+# Takes the path of the data file as a command line argument and
+# saves the plot of the strength of the magnetic field
 def main():
     file = sys.argv[1]
     mag = magnitudes(file)
