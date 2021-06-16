@@ -9,7 +9,7 @@ def magnitudes(file: str) -> [float]:
     return mag
 
 # Takes the path of the data path as a command line argument and
-#  saves the magnitude plot of the measured strength of the magnetometr
+# saves the magnitude plot of the measured strength of the magnetometr
 def main():
     file = sys.argv[1]
     mag = magnitudes(file)
