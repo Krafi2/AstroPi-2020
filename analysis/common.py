@@ -1,19 +1,11 @@
 import csv
 import datetime
 import numpy as np
+
 """
-date/time
-mag_x
-mag_y
-mag_z
-acc_x
-acc_y
-acc_z
-pitch
-roll
-yaw
-latitude
-longitude
+This class stores the recorded flight data.
+It contains fields `time`, `mag`, `acc`, `orientation`, and `pos`.
+date/time, mag_x, mag_y, mag_z, acc_x, acc_y, acc_z, pitch, roll, yaw, latitude, longitude
 """
 class Data:
     def __init__(self, file: str):
@@ -21,7 +13,7 @@ class Data:
             self.time = []
             self.mag = []
             self.acc = []
-            self.orientation = []
+            self.orientation = [] 
             self.pos = []
 
             reader = csv.DictReader(f)
